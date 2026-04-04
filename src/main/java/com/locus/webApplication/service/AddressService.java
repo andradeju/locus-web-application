@@ -102,6 +102,21 @@ public class AddressService {
         }
     }
 
+    public AddressResponseDTO setPrincipal(UUID addressId) {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+
+        addressRepository.findByUserIdAndIsPrincipalTrue(address.getUser().getId())
+                .ifPresent(existing -> {
+                    existing.setPrincipal(false);
+                    addressRepository.save(existing);
+                });
+
+        address.setPrincipal(true);
+        Address saved = addressRepository.save(address);
+        return toResponseDTO(saved);
+    }
+
     private AddressResponseDTO toResponseDTO(Address address) {
         return AddressResponseDTO.builder()
                 .id(address.getId())
