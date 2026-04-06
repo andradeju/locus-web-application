@@ -49,6 +49,19 @@ npm run dev
 
 O frontend estará disponível em `http://localhost:5173`
 
+## Como rodar com Docker
+
+Com Docker instalado, rode na raiz do projeto:
+```bash
+docker-compose up --build
+```
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+- Banco: PostgreSQL na porta `5432`
+
+> O usuário administrador deve ser criado diretamente no banco após subir os containers, alterando o campo `role` para `ADMIN`.
+
 ## Funcionalidades
 
 - Cadastro e listagem de usuários
