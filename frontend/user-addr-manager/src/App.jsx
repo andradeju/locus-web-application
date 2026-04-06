@@ -4,6 +4,8 @@ import UserForm from './pages/UserForm'
 import UserList from './pages/UserList'
 import AddressList from './pages/AddressList'
 import AddressForm from './pages/AddressForm'
+import Header from './components/Header'
+import UserCard from './components/UserCard'
 
 function App() {
   const [user, setUser] = useState(() => {
@@ -15,7 +17,12 @@ function App() {
 
   function handleLogin(userData) {
     setUser(userData)
+    if (userData.role === 'USER') {
+      setSelectedUser(userData)
+      setPage('addresses')
+    } else {
     setPage('list')
+    }
   }
 
   function handleLogout() {
@@ -34,43 +41,23 @@ function App() {
 
   return (
     <div>
-      <nav>
-        <span>Olá, {user.name} ({user.role})</span>
-        {user.role === 'ADMIN' && (
-          <>
-            <button onClick={() => setPage('list')}>Usuários</button>
-            <button onClick={() => setPage('create')}>Novo Usuário</button>
-            {selectedUser && (
-              <button onClick={() => setPage('addAddress')}>
-                Novo Endereço para {selectedUser.name}
-              </button>
-            )}
-          </>
-        )}
-        {user.role === 'USER' && (
-          <>
-            <button onClick={() => { setSelectedUser(user); setPage('addresses'); }}>
-              Meus Endereços
-            </button>
-            <button onClick={() => { setSelectedUser(user); setPage('addAddress'); }}>
-              Novo Endereço
-            </button>
-          </>
-        )}
-        <button onClick={handleLogout}>Sair</button>
-      </nav>
-
+    <Header
+        user={user}
+        selectedUser={selectedUser}
+        onLogout={handleLogout}
+        onNavigate={(p) => {
+          if (user.role === 'USER' && (p === 'addresses' || p === 'addAddress')) {
+            setSelectedUser(user)
+          }
+          setPage(p)
+        }}
+        onAddAddress={() => setPage('addAddress')}
+    />
       {page === 'list' && user.role === 'ADMIN' && <UserList onSelectUser={handleSelectUser} />}
       {page === 'create' && user.role === 'ADMIN' && <UserForm onSuccess={() => setPage('list')} />}
       {page === 'addresses' && selectedUser && (
-        <div>
-          <div>
-            <h3>Dados do Usuário</h3>
-            <p><strong>Nome:</strong> {selectedUser.name}</p>
-            <p><strong>CPF:</strong> {selectedUser.cpf}</p>
-            <p><strong>Data de Nascimento:</strong> {selectedUser.birthDate}</p>
-            <p><strong>Role:</strong> {selectedUser.role}</p>
-          </div>
+        <div className="container mt-4">
+          <UserCard user={selectedUser} />
           <AddressList userId={selectedUser.id} />
         </div>
       )}

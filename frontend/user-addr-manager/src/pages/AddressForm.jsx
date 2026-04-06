@@ -9,7 +9,7 @@ const initialForm = {
   neighborhood: '',
   city: '',
   state: '',
-  isPrincipal: false,
+  principal: false,
 };
 
 export default function AddressForm({ userId, onSuccess }) {
@@ -88,118 +88,137 @@ export default function AddressForm({ userId, onSuccess }) {
   }
 
   return (
-    <div>
-      <h2>Cadastro de Endereço</h2>
+    <div className="container mt-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8">
+          <div className="card shadow p-4">
+            <h2 className="mb-4">Cadastro de Endereço</h2>
 
-      {status && (
-        <div style={{ color: status.type === 'success' ? 'green' : 'red' }}>
-          {status.message}
+            {status && (
+              <div className={`alert ${status.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
+                {status.message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="row g-3">
+                <div className="col-md-4">
+                  <label className="form-label">CEP</label>
+                  <input
+                    name="zipCode"
+                    type="text"
+                    className={`form-control ${errors.zipCode ? 'is-invalid' : ''}`}
+                    value={form.zipCode}
+                    onChange={handleChange}
+                    onBlur={handleCepBlur}
+                    placeholder="00000-000"
+                    inputMode="numeric"
+                    maxLength={9}
+                  />
+                  {cepLoading && <small className="text-muted">Buscando CEP...</small>}
+                  {errors.zipCode && <div className="invalid-feedback">{errors.zipCode}</div>}
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Número</label>
+                  <input
+                    name="number"
+                    type="text"
+                    className={`form-control ${errors.number ? 'is-invalid' : ''}`}
+                    value={form.number}
+                    onChange={handleChange}
+                    placeholder="Ex: 100"
+                  />
+                  {errors.number && <div className="invalid-feedback">{errors.number}</div>}
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Complemento <span className="text-muted small">(opcional)</span></label>
+                  <input
+                    name="complement"
+                    type="text"
+                    className="form-control"
+                    value={form.complement}
+                    onChange={handleChange}
+                    placeholder="Apto, sala..."
+                  />
+                </div>
+
+                <div className="col-md-8">
+                  <label className="form-label">Logradouro</label>
+                  <input
+                    name="street"
+                    type="text"
+                    className={`form-control ${errors.street ? 'is-invalid' : ''}`}
+                    value={form.street}
+                    onChange={handleChange}
+                    readOnly
+                  />
+                  {errors.street && <div className="invalid-feedback">{errors.street}</div>}
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Bairro</label>
+                  <input
+                    name="neighborhood"
+                    type="text"
+                    className="form-control"
+                    value={form.neighborhood}
+                    onChange={handleChange}
+                    readOnly
+                  />
+                </div>
+
+                <div className="col-md-8">
+                  <label className="form-label">Cidade</label>
+                  <input
+                    name="city"
+                    type="text"
+                    className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+                    value={form.city}
+                    onChange={handleChange}
+                    readOnly
+                  />
+                  {errors.city && <div className="invalid-feedback">{errors.city}</div>}
+                </div>
+
+                <div className="col-md-4">
+                  <label className="form-label">Estado</label>
+                  <input
+                    name="state"
+                    type="text"
+                    className={`form-control ${errors.state ? 'is-invalid' : ''}`}
+                    value={form.state}
+                    onChange={handleChange}
+                    readOnly
+                  />
+                  {errors.state && <div className="invalid-feedback">{errors.state}</div>}
+                </div>
+
+                <div className="col-12">
+                  <div className="form-check">
+                    <input
+                      name="principal"
+                      type="checkbox"
+                      className="form-check-input"
+                      checked={form.principalrincipal}
+                      onChange={handleChange}
+                      id="principal"
+                    />
+                    <label className="form-check-label" htmlFor="principal">
+                      Endereço principal
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading} className="btn btn-primary mt-4 w-100">
+                {loading ? 'Cadastrando...' : 'Cadastrar Endereço'}
+              </button>
+            </form>
+          </div>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate>
-        <div>
-          <label>CEP</label>
-          <input
-            name="zipCode"
-            type="text"
-            value={form.zipCode}
-            onChange={handleChange}
-            onBlur={handleCepBlur}
-            placeholder="00000-000"
-            inputMode="numeric"
-            maxLength={9}
-          />
-          {cepLoading && <span>Buscando CEP...</span>}
-          {errors.zipCode && <span>{errors.zipCode}</span>}
-        </div>
-
-        <div>
-          <label>Número</label>
-          <input
-            name="number"
-            type="text"
-            value={form.number}
-            onChange={handleChange}
-            placeholder="Ex: 100"
-          />
-          {errors.number && <span>{errors.number}</span>}
-        </div>
-
-        <div>
-          <label>Complemento</label>
-          <input
-            name="complement"
-            type="text"
-            value={form.complement}
-            onChange={handleChange}
-            placeholder="Apto, sala... (opcional)"
-          />
-        </div>
-
-        <div>
-          <label>Logradouro</label>
-          <input
-            name="street"
-            type="text"
-            value={form.street}
-            onChange={handleChange}
-            readOnly
-          />
-          {errors.street && <span>{errors.street}</span>}
-        </div>
-
-        <div>
-          <label>Bairro</label>
-          <input
-            name="neighborhood"
-            type="text"
-            value={form.neighborhood}
-            onChange={handleChange}
-            readOnly
-          />
-        </div>
-
-        <div>
-          <label>Cidade</label>
-          <input
-            name="city"
-            type="text"
-            value={form.city}
-            onChange={handleChange}
-            readOnly
-          />
-          {errors.city && <span>{errors.city}</span>}
-        </div>
-
-        <div>
-          <label>Estado</label>
-          <input
-            name="state"
-            type="text"
-            value={form.state}
-            onChange={handleChange}
-            readOnly
-          />
-          {errors.state && <span>{errors.state}</span>}
-        </div>
-
-        <div>
-          <label>
-            <input
-              name="isPrincipal"
-              type="checkbox"
-              checked={form.isPrincipal}
-              onChange={handleChange}
-            />
-            Endereço principal
-          </label>
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? 'Cadastrando...' : 'Cadastrar Endereço'}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

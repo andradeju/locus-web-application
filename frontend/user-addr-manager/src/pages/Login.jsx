@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { login } from '../services/authService';
-import './Login.css';
 
 export default function Login({ onLogin }) {
   const [form, setForm] = useState({ cpf: '', password: '' });
@@ -30,36 +29,47 @@ export default function Login({ onLogin }) {
     }
   }
 
-return (
-  <div className="login-container">
-    <div className="login-box">
-      <h2>Login</h2>
-      {error && <p className="login-error">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>CPF</label>
-          <input
-            name="cpf"
-            type="text"
-            value={form.cpf}
-            onChange={handleChange}
-            placeholder="000.000.000-00"
-          />
-        </div>
-        <div>
-          <label>Senha</label>
-          <input
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit" disabled={loading} className="login-btn">
-          {loading ? 'Entrando...' : 'Entrar'}
-        </button>
-      </form>
+  return (
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+      <div className="card shadow p-4" style={{ width: '100%', maxWidth: '400px' }}>
+        <h2 className="text-center mb-4">Login</h2>
+
+        {error && (
+          <div className="alert alert-danger">{error}</div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label">CPF</label>
+            <input
+              name="cpf"
+              type="text"
+              className="form-control"
+              value={form.cpf}
+              onChange={handleChange}
+              placeholder="000.000.000-00"
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Senha</label>
+            <input
+              name="password"
+              type="password"
+              className="form-control"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="Digite sua senha"
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-100"
+          >
+            {loading ? 'Entrando...' : 'Entrar'}
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
-);
+  );
 }

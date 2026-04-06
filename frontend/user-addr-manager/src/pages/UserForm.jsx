@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { createUser } from '../services/userService';
-import './UserForm.css';
 
 function formatCpf(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -97,80 +96,86 @@ export default function UserForm({ onSuccess }) {
   }
 
   return (
-    <div className="userform-wrapper">
-      <h2 className="userform-title">Cadastro de Usuário</h2>
+    <div className="container mt-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-6">
+          <div className="card shadow p-4">
+            <h2 className="mb-4">Cadastro de Usuário</h2>
 
-      {status && (
-        <div className={status.type === 'success' ? 'userform-alert-success' : 'userform-alert-error'}>
-          {status.message}
+            {status && (
+              <div className={`alert ${status.type === 'success' ? 'alert-success' : 'alert-danger'}`}>
+                {status.message}
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="mb-3">
+                <label className="form-label">Nome</label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Nome completo"
+                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                  autoComplete="name"
+                />
+                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">CPF</label>
+                <input
+                  id="cpf"
+                  name="cpf"
+                  type="text"
+                  value={form.cpf}
+                  onChange={handleChange}
+                  placeholder="000.000.000-00"
+                  inputMode="numeric"
+                  className={`form-control ${errors.cpf ? 'is-invalid' : ''}`}
+                  autoComplete="off"
+                />
+                {errors.cpf && <div className="invalid-feedback">{errors.cpf}</div>}
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Data de Nascimento</label>
+                <input
+                  id="birthDate"
+                  name="birthDate"
+                  type="date"
+                  value={form.birthDate}
+                  onChange={handleChange}
+                  max={new Date().toISOString().split('T')[0]}
+                  className={`form-control ${errors.birthDate ? 'is-invalid' : ''}`}
+                />
+                {errors.birthDate && <div className="invalid-feedback">{errors.birthDate}</div>}
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Senha</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Mínimo 6 caracteres"
+                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                  autoComplete="new-password"
+                />
+                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+              </div>
+
+              <button type="submit" disabled={loading} className="btn btn-primary w-100">
+                {loading ? 'Cadastrando...' : 'Cadastrar'}
+              </button>
+            </form>
+          </div>
         </div>
-      )}
-
-      <form onSubmit={handleSubmit} noValidate className="userform-form">
-        <div className="userform-field">
-          <label htmlFor="name" className="userform-label">Nome</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Nome completo"
-            className={errors.name ? 'userform-input error' : 'userform-input'}
-            autoComplete="name"
-          />
-          {errors.name && <span className="userform-error">{errors.name}</span>}
-        </div>
-
-        <div className="userform-field">
-          <label htmlFor="cpf" className="userform-label">CPF</label>
-          <input
-            id="cpf"
-            name="cpf"
-            type="text"
-            value={form.cpf}
-            onChange={handleChange}
-            placeholder="000.000.000-00"
-            inputMode="numeric"
-            className={errors.cpf ? 'userform-input error' : 'userform-input'}
-            autoComplete="off"
-          />
-          {errors.cpf && <span className="userform-error">{errors.cpf}</span>}
-        </div>
-
-        <div className="userform-field">
-          <label htmlFor="birthDate" className="userform-label">Data de Nascimento</label>
-          <input
-            id="birthDate"
-            name="birthDate"
-            type="date"
-            value={form.birthDate}
-            onChange={handleChange}
-            max={new Date().toISOString().split('T')[0]}
-            className={errors.birthDate ? 'userform-input error' : 'userform-input'}
-          />
-          {errors.birthDate && <span className="userform-error">{errors.birthDate}</span>}
-        </div>
-
-        <div className="userform-field">
-          <label htmlFor="password" className="userform-label">Senha</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="Mínimo 6 caracteres"
-            className={errors.password ? 'userform-input error' : 'userform-input'}
-            autoComplete="new-password"
-          />
-          {errors.password && <span className="userform-error">{errors.password}</span>}
-        </div>
-
-        <button type="submit" disabled={loading} className="userform-btn">
-          {loading ? 'Cadastrando...' : 'Cadastrar'}
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
