@@ -21,5 +21,5 @@ public class AddressResponseDTO {
     private String neighborhood;
     private String city;
     private String state;
-    private boolean isPrincipal;
+    private boolean principal;
 }

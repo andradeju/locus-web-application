@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { getAddressesByUser, deleteAddress, setPrincipalAddress } from '../services/addressService';
+import { getAddressesByUser, deleteAddress, setPrincipalAddress, updateAddress } from '../services/addressService';
 
 export default function AddressList({ userId }) {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingAddress, setEditingAddress] = useState(null);
 
   function loadAddresses() {
     setLoading(true);
@@ -37,6 +38,17 @@ export default function AddressList({ userId }) {
     }
   }
 
+  async function handleUpdate(e) {
+    e.preventDefault();
+    try {
+      await updateAddress(editingAddress.id, editingAddress);
+      setEditingAddress(null);
+      loadAddresses();
+    } catch {
+      alert('Erro ao atualizar endereço.');
+    }
+  }
+
   if (loading) return <p>Carregando...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
   if (addresses.length === 0) return <p>Nenhum endereço cadastrado.</p>;
@@ -44,6 +56,41 @@ export default function AddressList({ userId }) {
   return (
     <div>
       <h2>Endereços</h2>
+
+      {editingAddress && (
+        <div>
+          <h3>Editar Endereço</h3>
+          <form onSubmit={handleUpdate}>
+            <div>
+              <label>Número</label>
+              <input
+                value={editingAddress.number}
+                onChange={(e) => setEditingAddress({ ...editingAddress, number: e.target.value })}
+              />
+            </div>
+            <div>
+              <label>Complemento</label>
+              <input
+                value={editingAddress.complement || ''}
+                onChange={(e) => setEditingAddress({ ...editingAddress, complement: e.target.value })}
+              />
+            </div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={editingAddress.isPrincipal}
+                  onChange={(e) => setEditingAddress({ ...editingAddress, isPrincipal: e.target.checked })}
+                />
+                Endereço principal
+              </label>
+            </div>
+            <button type="submit">Salvar</button>
+            <button type="button" onClick={() => setEditingAddress(null)}>Cancelar</button>
+          </form>
+        </div>
+      )}
+
       <table>
         <thead>
           <tr>
@@ -68,16 +115,13 @@ export default function AddressList({ userId }) {
               <td>{address.neighborhood}</td>
               <td>{address.city}</td>
               <td>{address.state}</td>
-              <td>{address.isPrincipal ? '✅' : ''}</td>
+              <td>{address.principal ? '✅' : ''}</td>
               <td>
+                <button onClick={() => setEditingAddress(address)}>Editar</button>
                 {!address.isPrincipal && (
-                  <button onClick={() => handleSetPrincipal(address.id)}>
-                    Tornar Principal
-                  </button>
+                  <button onClick={() => handleSetPrincipal(address.id)}>Tornar Principal</button>
                 )}
-                <button onClick={() => handleDelete(address.id)}>
-                  Excluir
-                </button>
+                <button onClick={() => handleDelete(address.id)}>Excluir</button>
               </td>
             </tr>
           ))}

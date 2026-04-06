@@ -41,9 +41,8 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
-    @JsonProperty("isPrincipal")
     @Column(nullable = false)
-    private boolean isPrincipal = false;
+    private boolean principal = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

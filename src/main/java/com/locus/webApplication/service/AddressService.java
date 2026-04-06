@@ -25,7 +25,7 @@ public class AddressService {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (dto.isPrincipal()) {
-            addressRepository.findByUserIdAndIsPrincipalTrue(userId)
+            addressRepository.findByUserIdAndPrincipalTrue(userId)
                     .ifPresent(existing -> {
                         existing.setPrincipal(false);
                         addressRepository.save(existing);
@@ -41,7 +41,7 @@ public class AddressService {
                 .neighborhood(dto.getNeighborhood())
                 .city(dto.getCity())
                 .state(dto.getState())
-                .isPrincipal(dto.isPrincipal())
+                .principal(dto.isPrincipal())
                 .build();
 
         Address saved = addressRepository.save(address);
@@ -60,7 +60,7 @@ public class AddressService {
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
         if (dto.isPrincipal()) {
-            addressRepository.findByUserIdAndIsPrincipalTrue(address.getUser().getId())
+            addressRepository.findByUserIdAndPrincipalTrue(address.getUser().getId())
                     .ifPresent(existing -> {
                         if (!existing.getId().equals(addressId)) {
                             existing.setPrincipal(false);
@@ -106,7 +106,7 @@ public class AddressService {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
-        addressRepository.findByUserIdAndIsPrincipalTrue(address.getUser().getId())
+        addressRepository.findByUserIdAndPrincipalTrue(address.getUser().getId())
                 .ifPresent(existing -> {
                     existing.setPrincipal(false);
                     addressRepository.save(existing);
@@ -127,7 +127,7 @@ public class AddressService {
                 .neighborhood(address.getNeighborhood())
                 .city(address.getCity())
                 .state(address.getState())
-                .isPrincipal(address.isPrincipal())
+                .principal(address.isPrincipal())
                 .build();
     }
 }

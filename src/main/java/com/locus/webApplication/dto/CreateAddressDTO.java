@@ -18,5 +18,5 @@ public class CreateAddressDTO {
     private String neighborhood;
     private String city;
     private String state;
-    private boolean isPrincipal;
+    private boolean principal;
 }
