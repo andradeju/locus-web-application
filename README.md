@@ -76,8 +76,8 @@ docker-compose up --build
 ## Usuário padrão
 
 | CPF | Senha | Perfil |
-|---|---|---|
-| 00000000000 | admin123 | ADMIN |
+|--|---|---|
+| 98765432100 | admin123 | ADMIN |
 
 **Administrador**
 - Visualiza todos os usuários e endereços
