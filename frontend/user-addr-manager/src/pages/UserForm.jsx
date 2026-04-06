@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createUser } from '../services/userService';
+import './UserForm.css';
 
 function formatCpf(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -96,18 +97,18 @@ export default function UserForm({ onSuccess }) {
   }
 
   return (
-    <div style={styles.wrapper}>
-      <h2 style={styles.title}>Cadastro de Usuário</h2>
+    <div className="userform-wrapper">
+      <h2 className="userform-title">Cadastro de Usuário</h2>
 
       {status && (
-        <div style={status.type === 'success' ? styles.alertSuccess : styles.alertError}>
+        <div className={status.type === 'success' ? 'userform-alert-success' : 'userform-alert-error'}>
           {status.message}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} noValidate style={styles.form}>
-        <div style={styles.field}>
-          <label htmlFor="name" style={styles.label}>Nome</label>
+      <form onSubmit={handleSubmit} noValidate className="userform-form">
+        <div className="userform-field">
+          <label htmlFor="name" className="userform-label">Nome</label>
           <input
             id="name"
             name="name"
@@ -115,14 +116,14 @@ export default function UserForm({ onSuccess }) {
             value={form.name}
             onChange={handleChange}
             placeholder="Nome completo"
-            style={errors.name ? { ...styles.input, ...styles.inputError } : styles.input}
+            className={errors.name ? 'userform-input error' : 'userform-input'}
             autoComplete="name"
           />
-          {errors.name && <span style={styles.error}>{errors.name}</span>}
+          {errors.name && <span className="userform-error">{errors.name}</span>}
         </div>
 
-        <div style={styles.field}>
-          <label htmlFor="cpf" style={styles.label}>CPF</label>
+        <div className="userform-field">
+          <label htmlFor="cpf" className="userform-label">CPF</label>
           <input
             id="cpf"
             name="cpf"
@@ -131,14 +132,14 @@ export default function UserForm({ onSuccess }) {
             onChange={handleChange}
             placeholder="000.000.000-00"
             inputMode="numeric"
-            style={errors.cpf ? { ...styles.input, ...styles.inputError } : styles.input}
+            className={errors.cpf ? 'userform-input error' : 'userform-input'}
             autoComplete="off"
           />
-          {errors.cpf && <span style={styles.error}>{errors.cpf}</span>}
+          {errors.cpf && <span className="userform-error">{errors.cpf}</span>}
         </div>
 
-        <div style={styles.field}>
-          <label htmlFor="birthDate" style={styles.label}>Data de Nascimento</label>
+        <div className="userform-field">
+          <label htmlFor="birthDate" className="userform-label">Data de Nascimento</label>
           <input
             id="birthDate"
             name="birthDate"
@@ -146,13 +147,13 @@ export default function UserForm({ onSuccess }) {
             value={form.birthDate}
             onChange={handleChange}
             max={new Date().toISOString().split('T')[0]}
-            style={errors.birthDate ? { ...styles.input, ...styles.inputError } : styles.input}
+            className={errors.birthDate ? 'userform-input error' : 'userform-input'}
           />
-          {errors.birthDate && <span style={styles.error}>{errors.birthDate}</span>}
+          {errors.birthDate && <span className="userform-error">{errors.birthDate}</span>}
         </div>
 
-        <div style={styles.field}>
-          <label htmlFor="password" style={styles.label}>Senha</label>
+        <div className="userform-field">
+          <label htmlFor="password" className="userform-label">Senha</label>
           <input
             id="password"
             name="password"
@@ -160,18 +161,16 @@ export default function UserForm({ onSuccess }) {
             value={form.password}
             onChange={handleChange}
             placeholder="Mínimo 6 caracteres"
-            style={errors.password ? { ...styles.input, ...styles.inputError } : styles.input}
+            className={errors.password ? 'userform-input error' : 'userform-input'}
             autoComplete="new-password"
           />
-          {errors.password && <span style={styles.error}>{errors.password}</span>}
+          {errors.password && <span className="userform-error">{errors.password}</span>}
         </div>
 
-        <button type="submit" disabled={loading} style={loading ? { ...styles.button, ...styles.buttonDisabled } : styles.button}>
+        <button type="submit" disabled={loading} className="userform-btn">
           {loading ? 'Cadastrando...' : 'Cadastrar'}
         </button>
       </form>
     </div>
   );
 }
-
-

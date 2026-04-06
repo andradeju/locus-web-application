@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { login } from '../services/authService';
+import './Login.css';
 
 export default function Login({ onLogin }) {
   const [form, setForm] = useState({ cpf: '', password: '' });
@@ -29,10 +30,11 @@ export default function Login({ onLogin }) {
     }
   }
 
-  return (
-    <div>
+return (
+  <div className="login-container">
+    <div className="login-box">
       <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="login-error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>CPF</label>
@@ -53,10 +55,11 @@ export default function Login({ onLogin }) {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="login-btn">
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>
     </div>
-  );
+  </div>
+);
 }

@@ -40,6 +40,11 @@ function App() {
           <>
             <button onClick={() => setPage('list')}>Usuários</button>
             <button onClick={() => setPage('create')}>Novo Usuário</button>
+            {selectedUser && (
+              <button onClick={() => setPage('addAddress')}>
+                Novo Endereço para {selectedUser.name}
+              </button>
+            )}
           </>
         )}
         {user.role === 'USER' && (
@@ -57,7 +62,18 @@ function App() {
 
       {page === 'list' && user.role === 'ADMIN' && <UserList onSelectUser={handleSelectUser} />}
       {page === 'create' && user.role === 'ADMIN' && <UserForm onSuccess={() => setPage('list')} />}
-      {page === 'addresses' && selectedUser && <AddressList userId={selectedUser.id} />}
+      {page === 'addresses' && selectedUser && (
+        <div>
+          <div>
+            <h3>Dados do Usuário</h3>
+            <p><strong>Nome:</strong> {selectedUser.name}</p>
+            <p><strong>CPF:</strong> {selectedUser.cpf}</p>
+            <p><strong>Data de Nascimento:</strong> {selectedUser.birthDate}</p>
+            <p><strong>Role:</strong> {selectedUser.role}</p>
+          </div>
+          <AddressList userId={selectedUser.id} />
+        </div>
+      )}
       {page === 'addAddress' && selectedUser && (
         <AddressForm userId={selectedUser.id} onSuccess={() => setPage('addresses')} />
       )}

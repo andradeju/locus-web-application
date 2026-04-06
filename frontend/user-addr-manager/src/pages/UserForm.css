@@ -1,0 +1,70 @@
+.userform-wrapper {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+.userform-title {
+  margin-bottom: 24px;
+}
+
+.userform-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.userform-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.userform-label {
+  font-weight: 500;
+}
+
+.userform-input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.userform-input.error {
+  border-color: red;
+}
+
+.userform-error {
+  color: red;
+  font-size: 12px;
+}
+
+.userform-btn {
+  padding: 10px;
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.userform-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.userform-alert-success {
+  padding: 10px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+}
+
+.userform-alert-error {
+  padding: 10px;
+  background: #f8d7da;
+  color: #721c24;
+  border-radius: 4px;
+}

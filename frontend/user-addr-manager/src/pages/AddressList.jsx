@@ -57,39 +57,74 @@ export default function AddressList({ userId }) {
     <div>
       <h2>Endereços</h2>
 
-      {editingAddress && (
-        <div>
-          <h3>Editar Endereço</h3>
-          <form onSubmit={handleUpdate}>
-            <div>
-              <label>Número</label>
-              <input
-                value={editingAddress.number}
-                onChange={(e) => setEditingAddress({ ...editingAddress, number: e.target.value })}
-              />
-            </div>
-            <div>
-              <label>Complemento</label>
-              <input
-                value={editingAddress.complement || ''}
-                onChange={(e) => setEditingAddress({ ...editingAddress, complement: e.target.value })}
-              />
-            </div>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={editingAddress.isPrincipal}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, isPrincipal: e.target.checked })}
-                />
-                Endereço principal
-              </label>
-            </div>
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={() => setEditingAddress(null)}>Cancelar</button>
-          </form>
-        </div>
-      )}
+     {editingAddress && (
+  <div>
+    <h3>Editar Endereço</h3>
+    <form onSubmit={handleUpdate}>
+      <div>
+        <label>CEP</label>
+        <input
+          value={editingAddress.zipCode}
+          onChange={(e) => setEditingAddress({ ...editingAddress, zipCode: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Logradouro</label>
+        <input
+          value={editingAddress.street}
+          onChange={(e) => setEditingAddress({ ...editingAddress, street: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Número</label>
+        <input
+          value={editingAddress.number}
+          onChange={(e) => setEditingAddress({ ...editingAddress, number: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Complemento</label>
+        <input
+          value={editingAddress.complement || ''}
+          onChange={(e) => setEditingAddress({ ...editingAddress, complement: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Bairro</label>
+        <input
+          value={editingAddress.neighborhood}
+          onChange={(e) => setEditingAddress({ ...editingAddress, neighborhood: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Cidade</label>
+        <input
+          value={editingAddress.city}
+          onChange={(e) => setEditingAddress({ ...editingAddress, city: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>Estado</label>
+        <input
+          value={editingAddress.state}
+          onChange={(e) => setEditingAddress({ ...editingAddress, state: e.target.value })}
+        />
+      </div>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={editingAddress.principal}
+            onChange={(e) => setEditingAddress({ ...editingAddress, principal: e.target.checked })}
+          />
+          Endereço principal
+        </label>
+      </div>
+      <button type="submit">Salvar</button>
+      <button type="button" onClick={() => setEditingAddress(null)}>Cancelar</button>
+    </form>
+  </div>
+)}
 
       <table>
         <thead>
