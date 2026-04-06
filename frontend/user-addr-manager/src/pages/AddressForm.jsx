@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createAddress, getAddressByCep } from '../services/addressService';
+import FormField from '../components/FormField';
 
 const initialForm = {
   zipCode: '',
@@ -12,6 +13,10 @@ const initialForm = {
   principal: false,
 };
 
+function cleanCep(value) {
+  return value.replace(/\D/g, '');
+}
+
 export default function AddressForm({ userId, onSuccess }) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
@@ -20,7 +25,7 @@ export default function AddressForm({ userId, onSuccess }) {
   const [cepLoading, setCepLoading] = useState(false);
 
   async function handleCepBlur() {
-    const cep = form.zipCode.replace(/\D/g, '');
+    const cep = cleanCep(form.zipCode);
     if (cep.length !== 8) return;
 
     setCepLoading(true);
@@ -47,7 +52,7 @@ export default function AddressForm({ userId, onSuccess }) {
   function validate() {
     const errs = {};
     if (!form.zipCode.trim()) errs.zipCode = 'CEP é obrigatório.';
-    else if (form.zipCode.replace(/\D/g, '').length !== 8) errs.zipCode = 'CEP inválido.';
+    else if (cleanCep(form.zipCode).length !== 8) errs.zipCode = 'CEP inválido.';
     if (!form.number.trim()) errs.number = 'Número é obrigatório.';
     if (!form.street.trim()) errs.street = 'Logradouro é obrigatório.';
     if (!form.city.trim()) errs.city = 'Cidade é obrigatória.';
@@ -74,7 +79,7 @@ export default function AddressForm({ userId, onSuccess }) {
     try {
       await createAddress(userId, {
         ...form,
-        zipCode: form.zipCode.replace(/\D/g, ''),
+        zipCode: cleanCep(form.zipCode),
       });
       setStatus({ type: 'success', message: 'Endereço cadastrado com sucesso!' });
       setForm(initialForm);
@@ -103,96 +108,98 @@ export default function AddressForm({ userId, onSuccess }) {
             <form onSubmit={handleSubmit} noValidate>
               <div className="row g-3">
                 <div className="col-md-4">
-                  <label className="form-label">CEP</label>
-                  <input
-                    name="zipCode"
-                    type="text"
-                    className={`form-control ${errors.zipCode ? 'is-invalid' : ''}`}
-                    value={form.zipCode}
-                    onChange={handleChange}
-                    onBlur={handleCepBlur}
-                    placeholder="00000-000"
-                    inputMode="numeric"
-                    maxLength={9}
-                  />
-                  {cepLoading && <small className="text-muted">Buscando CEP...</small>}
-                  {errors.zipCode && <div className="invalid-feedback">{errors.zipCode}</div>}
+                  <FormField label="CEP" error={errors.zipCode}>
+                    <input
+                      name="zipCode"
+                      type="text"
+                      className={`form-control ${errors.zipCode ? 'is-invalid' : ''}`}
+                      value={form.zipCode}
+                      onChange={handleChange}
+                      onBlur={handleCepBlur}
+                      placeholder="00000-000"
+                      inputMode="numeric"
+                      maxLength={9}
+                    />
+                    {cepLoading && <small className="text-muted">Buscando CEP...</small>}
+                  </FormField>
                 </div>
 
                 <div className="col-md-4">
-                  <label className="form-label">Número</label>
-                  <input
-                    name="number"
-                    type="text"
-                    className={`form-control ${errors.number ? 'is-invalid' : ''}`}
-                    value={form.number}
-                    onChange={handleChange}
-                    placeholder="Ex: 100"
-                  />
-                  {errors.number && <div className="invalid-feedback">{errors.number}</div>}
+                  <FormField label="Número" error={errors.number}>
+                    <input
+                      name="number"
+                      type="text"
+                      className={`form-control ${errors.number ? 'is-invalid' : ''}`}
+                      value={form.number}
+                      onChange={handleChange}
+                      placeholder="Ex: 100"
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-md-4">
-                  <label className="form-label">Complemento <span className="text-muted small">(opcional)</span></label>
-                  <input
-                    name="complement"
-                    type="text"
-                    className="form-control"
-                    value={form.complement}
-                    onChange={handleChange}
-                    placeholder="Apto, sala..."
-                  />
+                  <FormField label={<>Complemento <span className="text-muted small">(opcional)</span></>}>
+                    <input
+                      name="complement"
+                      type="text"
+                      className="form-control"
+                      value={form.complement}
+                      onChange={handleChange}
+                      placeholder="Apto, sala..."
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-md-8">
-                  <label className="form-label">Logradouro</label>
-                  <input
-                    name="street"
-                    type="text"
-                    className={`form-control ${errors.street ? 'is-invalid' : ''}`}
-                    value={form.street}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                  {errors.street && <div className="invalid-feedback">{errors.street}</div>}
+                  <FormField label="Logradouro" error={errors.street}>
+                    <input
+                      name="street"
+                      type="text"
+                      className={`form-control ${errors.street ? 'is-invalid' : ''}`}
+                      value={form.street}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-md-4">
-                  <label className="form-label">Bairro</label>
-                  <input
-                    name="neighborhood"
-                    type="text"
-                    className="form-control"
-                    value={form.neighborhood}
-                    onChange={handleChange}
-                    readOnly
-                  />
+                  <FormField label="Bairro">
+                    <input
+                      name="neighborhood"
+                      type="text"
+                      className="form-control"
+                      value={form.neighborhood}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-md-8">
-                  <label className="form-label">Cidade</label>
-                  <input
-                    name="city"
-                    type="text"
-                    className={`form-control ${errors.city ? 'is-invalid' : ''}`}
-                    value={form.city}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                  {errors.city && <div className="invalid-feedback">{errors.city}</div>}
+                  <FormField label="Cidade" error={errors.city}>
+                    <input
+                      name="city"
+                      type="text"
+                      className={`form-control ${errors.city ? 'is-invalid' : ''}`}
+                      value={form.city}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-md-4">
-                  <label className="form-label">Estado</label>
-                  <input
-                    name="state"
-                    type="text"
-                    className={`form-control ${errors.state ? 'is-invalid' : ''}`}
-                    value={form.state}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                  {errors.state && <div className="invalid-feedback">{errors.state}</div>}
+                  <FormField label="Estado" error={errors.state}>
+                    <input
+                      name="state"
+                      type="text"
+                      className={`form-control ${errors.state ? 'is-invalid' : ''}`}
+                      value={form.state}
+                      onChange={handleChange}
+                      readOnly
+                    />
+                  </FormField>
                 </div>
 
                 <div className="col-12">
@@ -201,7 +208,7 @@ export default function AddressForm({ userId, onSuccess }) {
                       name="principal"
                       type="checkbox"
                       className="form-check-input"
-                      checked={form.principalrincipal}
+                      checked={form.principal}
                       onChange={handleChange}
                       id="principal"
                     />

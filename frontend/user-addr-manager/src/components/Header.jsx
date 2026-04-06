@@ -1,7 +1,11 @@
 export default function Header({ user, selectedUser, onLogout, onNavigate, onAddAddress }) {
   return (
     <nav className="navbar navbar-dark bg-dark px-3">
-      <span className="navbar-brand">📍 Locus</span>
+      <span className="navbar-brand"
+        style={{ cursor: 'pointer' }}
+        onClick={() => onNavigate(user.role === 'ADMIN' ? 'list' : 'addresses')}>
+          📍Locus
+      </span>
       <div className="d-flex align-items-center gap-2 flex-wrap">
         <span className="text-white me-2">
           Olá, {user.name}

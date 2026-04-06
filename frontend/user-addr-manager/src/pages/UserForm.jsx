@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createUser } from '../services/userService';
+import FormField from '../components/FormField';
 
 function formatCpf(value) {
   const digits = value.replace(/\D/g, '').slice(0, 11);
@@ -110,63 +111,63 @@ export default function UserForm({ onSuccess }) {
 
             <form onSubmit={handleSubmit} noValidate>
               <div className="mb-3">
-                <label className="form-label">Nome</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Nome completo"
-                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                  autoComplete="name"
-                />
-                {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                <FormField label="Nome" error={errors.name}>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="Nome completo"
+                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                    autoComplete="name"
+                  />
+                </FormField>
               </div>
 
               <div className="mb-3">
-                <label className="form-label">CPF</label>
-                <input
-                  id="cpf"
-                  name="cpf"
-                  type="text"
-                  value={form.cpf}
-                  onChange={handleChange}
-                  placeholder="000.000.000-00"
-                  inputMode="numeric"
-                  className={`form-control ${errors.cpf ? 'is-invalid' : ''}`}
-                  autoComplete="off"
-                />
-                {errors.cpf && <div className="invalid-feedback">{errors.cpf}</div>}
+                <FormField label="CPF" error={errors.cpf}>
+                  <input
+                    id="cpf"
+                    name="cpf"
+                    type="text"
+                    value={form.cpf}
+                    onChange={handleChange}
+                    placeholder="000.000.000-00"
+                    inputMode="numeric"
+                    className={`form-control ${errors.cpf ? 'is-invalid' : ''}`}
+                    autoComplete="off"
+                  />
+                </FormField>
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Data de Nascimento</label>
-                <input
-                  id="birthDate"
-                  name="birthDate"
-                  type="date"
-                  value={form.birthDate}
-                  onChange={handleChange}
-                  max={new Date().toISOString().split('T')[0]}
-                  className={`form-control ${errors.birthDate ? 'is-invalid' : ''}`}
-                />
-                {errors.birthDate && <div className="invalid-feedback">{errors.birthDate}</div>}
+                <FormField label="Data de Nascimento" error={errors.birthDate}>
+                  <input
+                    id="birthDate"
+                    name="birthDate"
+                    type="date"
+                    value={form.birthDate}
+                    onChange={handleChange}
+                    max={new Date().toISOString().split('T')[0]}
+                    className={`form-control ${errors.birthDate ? 'is-invalid' : ''}`}
+                  />
+                </FormField>
               </div>
 
               <div className="mb-3">
-                <label className="form-label">Senha</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Mínimo 6 caracteres"
-                  className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                  autoComplete="new-password"
-                />
-                {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+                <FormField label="Senha" error={errors.password}>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={form.password}
+                    onChange={handleChange}
+                    placeholder="Mínimo 6 caracteres"
+                    className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                    autoComplete="new-password"
+                  />
+                </FormField>
               </div>
 
               <button type="submit" disabled={loading} className="btn btn-primary w-100">

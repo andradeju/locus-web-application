@@ -1,6 +1,27 @@
 import { useEffect, useState } from 'react';
 import { getAddressesByUser, deleteAddress, setPrincipalAddress, updateAddress } from '../services/addressService';
 
+function ConfirmDeleteModal({ onConfirm, onCancel }) {
+  return (
+    <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Confirmar exclusão</h5>
+          </div>
+          <div className="modal-body">
+            <p>Deseja excluir este endereço?</p>
+          </div>
+          <div className="modal-footer">
+            <button className="btn btn-secondary" onClick={onCancel}>Cancelar</button>
+            <button className="btn btn-danger" onClick={onConfirm}>Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AddressList({ userId }) {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,6 +62,11 @@ export default function AddressList({ userId }) {
     }
   }
 
+  function handleEditChange(e) {
+    const { name, value, type, checked } = e.target;
+    setEditingAddress((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+  }
+
   async function handleUpdate(e) {
     e.preventDefault();
     try {
@@ -60,22 +86,10 @@ export default function AddressList({ userId }) {
     <div className="container mt-4">
 
       {confirmDeleteId && (
-        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirmar exclusão</h5>
-              </div>
-              <div className="modal-body">
-                <p>Deseja excluir este endereço?</p>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setConfirmDeleteId(null)}>Cancelar</button>
-                <button className="btn btn-danger" onClick={() => handleDelete(confirmDeleteId)}>Excluir</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ConfirmDeleteModal
+          onConfirm={() => handleDelete(confirmDeleteId)}
+          onCancel={() => setConfirmDeleteId(null)}
+        />
       )}
 
       <h2 className="mb-4">Endereços</h2>
@@ -87,44 +101,36 @@ export default function AddressList({ userId }) {
             <div className="row g-3">
               <div className="col-md-3">
                 <label className="form-label">CEP</label>
-                <input className="form-control" value={editingAddress.zipCode}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, zipCode: e.target.value })} />
+                <input className="form-control" name="zipCode" value={editingAddress.zipCode} onChange={handleEditChange} />
               </div>
               <div className="col-md-5">
                 <label className="form-label">Logradouro</label>
-                <input className="form-control" value={editingAddress.street}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, street: e.target.value })} />
+                <input className="form-control" name="street" value={editingAddress.street} onChange={handleEditChange} />
               </div>
               <div className="col-md-2">
                 <label className="form-label">Número</label>
-                <input className="form-control" value={editingAddress.number}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, number: e.target.value })} />
+                <input className="form-control" name="number" value={editingAddress.number} onChange={handleEditChange} />
               </div>
               <div className="col-md-2">
                 <label className="form-label">Complemento</label>
-                <input className="form-control" value={editingAddress.complement || ''}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, complement: e.target.value })} />
+                <input className="form-control" name="complement" value={editingAddress.complement || ''} onChange={handleEditChange} />
               </div>
               <div className="col-md-4">
                 <label className="form-label">Bairro</label>
-                <input className="form-control" value={editingAddress.neighborhood}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, neighborhood: e.target.value })} />
+                <input className="form-control" name="neighborhood" value={editingAddress.neighborhood} onChange={handleEditChange} />
               </div>
               <div className="col-md-4">
                 <label className="form-label">Cidade</label>
-                <input className="form-control" value={editingAddress.city}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, city: e.target.value })} />
+                <input className="form-control" name="city" value={editingAddress.city} onChange={handleEditChange} />
               </div>
               <div className="col-md-2">
                 <label className="form-label">Estado</label>
-                <input className="form-control" value={editingAddress.state}
-                  onChange={(e) => setEditingAddress({ ...editingAddress, state: e.target.value })} />
+                <input className="form-control" name="state" value={editingAddress.state} onChange={handleEditChange} />
               </div>
               <div className="col-md-2 d-flex align-items-end">
                 <div className="form-check">
-                  <input className="form-check-input" type="checkbox"
-                    checked={editingAddress.principal}
-                    onChange={(e) => setEditingAddress({ ...editingAddress, principal: e.target.checked })} />
+                  <input className="form-check-input" type="checkbox" name="principal"
+                    checked={editingAddress.principal} onChange={handleEditChange} />
                   <label className="form-check-label">Principal</label>
                 </div>
               </div>
