@@ -73,6 +73,12 @@ docker-compose up --build
 
 ## Perfis de acesso
 
+## Usuário padrão
+
+| CPF | Senha | Perfil |
+|---|---|---|
+| 00000000000 | admin123 | ADMIN |
+
 **Administrador**
 - Visualiza todos os usuários e endereços
 - Cadastra usuários e endereços
