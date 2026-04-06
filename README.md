@@ -29,6 +29,9 @@ Aplicação web para cadastro de usuários e gerenciamento de endereços, com co
 
 1. Crie um banco de dados PostgreSQL chamado `locusdb`
 2. Configure as variáveis de ambiente criando um arquivo `.env` na raiz do projeto:
+DB_URL=jdbc:postgresql://localhost:5432/locusdb
+DB_USERNAME=postgres
+DB_PASSWORD=sua_senha
 
 ### Backend
 ```bash
@@ -39,7 +42,7 @@ A API estará disponível em `http://localhost:8080`
 
 ### Frontend
 ```bash
-cd frontend
+cd frontend/user-addr-manager
 npm install
 npm run dev
 ```
