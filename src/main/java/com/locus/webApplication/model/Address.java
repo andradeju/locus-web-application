@@ -1,5 +1,6 @@
 package com.locus.webApplication.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,7 @@ public class Address {
     @Column(nullable = false)
     private String state;
 
+    @JsonProperty("isPrincipal")
     @Column(nullable = false)
     private boolean isPrincipal = false;
 

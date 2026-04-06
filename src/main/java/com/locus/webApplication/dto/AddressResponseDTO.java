@@ -21,6 +21,5 @@ public class AddressResponseDTO {
     private String neighborhood;
     private String city;
     private String state;
-    @JsonProperty("isPrincipal")
     private boolean isPrincipal;
 }

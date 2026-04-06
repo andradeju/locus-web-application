@@ -18,6 +18,5 @@ public class CreateAddressDTO {
     private String neighborhood;
     private String city;
     private String state;
-    @JsonProperty("isPrincipal")
     private boolean isPrincipal;
 }

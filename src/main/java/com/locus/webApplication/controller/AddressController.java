@@ -2,7 +2,9 @@ package com.locus.webApplication.controller;
 
 import com.locus.webApplication.dto.AddressResponseDTO;
 import com.locus.webApplication.dto.CreateAddressDTO;
+import com.locus.webApplication.dto.ViaCepResponseDTO;
 import com.locus.webApplication.service.AddressService;
+import com.locus.webApplication.service.ViaCepService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class AddressController {
 
     private final AddressService addressService;
+    private final ViaCepService viaCepService;
 
     @PostMapping("/users/{userId}/addresses")
     public ResponseEntity<AddressResponseDTO> create(
@@ -47,5 +50,10 @@ public class AddressController {
     @PatchMapping("/addresses/{id}/principal")
     public ResponseEntity<AddressResponseDTO> setPrincipal(@PathVariable UUID id) {
         return ResponseEntity.ok(addressService.setPrincipal(id));
+    }
+
+    @GetMapping("/cep/{cep}")
+    public ResponseEntity<ViaCepResponseDTO> findByCep(@PathVariable String cep) {
+        return ResponseEntity.ok(viaCepService.findAddressByCep(cep));
     }
 }
