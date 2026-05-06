@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getAllUsers } from '../services/userService';
 import { formatDate } from '../utils/formatDate';
+import { getAllUsers, deleteUser } from '../services/userService';
 
 export default function UserList({ onSelectUser }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     getAllUsers()
@@ -17,6 +18,17 @@ export default function UserList({ onSelectUser }) {
   if (loading) return <p className="text-center mt-4">Carregando...</p>;
   if (error) return <p className="text-danger text-center mt-4">{error}</p>;
   if (users.length === 0) return <p className="text-center mt-4">Nenhum usuário cadastrado.</p>;
+
+  async function handleDelete(id) {
+    try {
+      await deleteUser(id);
+      setUsers(users.filter(u => u.id !== id));
+      setUserToDelete(null);
+    } catch {
+      alert('Erro ao excluir usuário.');
+      setUserToDelete(null);
+    }
+  }
 
   return (
     <div className="container mt-4">
@@ -45,10 +57,15 @@ export default function UserList({ onSelectUser }) {
                 </td>
                 <td>
                   <button
-                    className="btn btn-sm btn-outline-primary"
+                    className="btn btn-sm btn-outline-primary me-3"
                     onClick={() => onSelectUser(user)}
                   >
                     Ver Endereços
+                  </button>
+                  <button
+                      className="btn btn-sm btn-outline-danger"
+                      onClick={() => setUserToDelete(user)}>
+                    Excluir
                   </button>
                 </td>
               </tr>
@@ -56,6 +73,30 @@ export default function UserList({ onSelectUser }) {
           </tbody>
         </table>
       </div>
+      {userToDelete && (
+          <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirmar exclusão</h5>
+                  <button className="btn-close" onClick={() => setUserToDelete(null)} />
+                </div>
+                <div className="modal-body">
+                  <p>Tem certeza que deseja excluir <strong>{userToDelete.name}</strong>?</p>
+                  <p className="text-muted small">Todos os endereços deste usuário também serão removidos.</p>
+                </div>
+                <div className="modal-footer">
+                  <button className="btn btn-secondary" onClick={() => setUserToDelete(null)}>
+                    Cancelar
+                  </button>
+                  <button className="btn btn-danger" onClick={() => handleDelete(userToDelete.id)}>
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+      )}
     </div>
   );
 }

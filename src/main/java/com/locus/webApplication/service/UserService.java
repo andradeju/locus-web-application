@@ -5,6 +5,7 @@ import com.locus.webApplication.dto.UserResponseDTO;
 import com.locus.webApplication.model.Role;
 import com.locus.webApplication.model.User;
 import com.locus.webApplication.repository.UserRepository;
+import com.locus.webApplication.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AddressRepository addressRepository;
 
     public UserResponseDTO createUser(CreateUserDTO dto) {
         if (userRepository.existsByCpf(dto.getCpf())) {
@@ -49,6 +51,13 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         return toResponseDTO(user);
+    }
+
+    public void deleteUser(UUID id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        addressRepository.deleteByUserId(user.getId());
+        userRepository.delete(user);
     }
 
     private UserResponseDTO toResponseDTO(User user) {
