@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { login } from '../services/authService';
+import  { formatCpf, validateCpf } from "../utils/validators.js";
 
 export default function Login({ onLogin }) {
   const [form, setForm] = useState({ cpf: '', password: '' });
@@ -8,13 +9,22 @@ export default function Login({ onLogin }) {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    if(name === 'cpf') {
+      setForm((prev) => ({ ...prev, cpf: formatCpf(value) }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if(!validateCpf(form.cpf)) {
+      setError('CPF inválido')
+    return;
+    }
+    setLoading(true);
     try {
       const { data } = await login({
         cpf: form.cpf.replace(/\D/g, ''),
